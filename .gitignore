@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.py[cod]
 
 # C extensions
@@ -38,3 +39,11 @@ nosetests.xml
 *.bak
 .bmx*
 *.exe
+=======
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+>>>>>>> 0352c3d1d8a29ad460da333f403342cc56d49bc2
