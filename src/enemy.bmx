@@ -11,7 +11,7 @@ Type Enemy Extends Sprite
 	End Method
 End Type
 
-Function newEnemy:Enemy(minY:Int, maxY:Int)
+Function NewEnemy:Enemy(minY:Int, maxY:Int)
 	Local newEnemy:Enemy = New Enemy
 	newEnemy.initEnemy(minY, maxY)
 	Return newEnemy

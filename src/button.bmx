@@ -4,13 +4,15 @@ Const BUTTONSTATE_CLICKED:Int     = 2
 Const BUTTONSTATE_UNCLICKABLE:Int = 3
 
 Type Button Extends Sprite
-	Field state:Int
+	Field State:Int
 	Field HasBeenClicked:Int
+	Field ID:Int
 	
-	Method initButton(x:Int, y:Int, w:Int, h:Int)
+	Method initButton(x:Int, y:Int, w:Int, h:Int, ID:Int)
 		Self.initSprite(x, y, w, h)
-		Self.state = BUTTONSTATE_CLICKABLE
+		Self.State = BUTTONSTATE_CLICKABLE
 		Self.HasBeenClicked = False
+		Self.ID = ID
 	End Method
 	
 	Method isMouseOver:Int()
@@ -21,28 +23,28 @@ Type Button Extends Sprite
 		Select state
 			Case BUTTONSTATE_CLICKABLE
 				If isMouseOver() And Not MouseDown(MOUSE_LEFT)
-					state = BUTTONSTATE_MOUSEOVER
+					State = BUTTONSTATE_MOUSEOVER
 				EndIf
 			
 			Case BUTTONSTATE_MOUSEOVER
 				If isMouseOver() And MouseDown(MOUSE_LEFT)
-					state = BUTTONSTATE_CLICKED
+					State = BUTTONSTATE_CLICKED
 				Else If Not isMouseOver()
-					state = BUTTONSTATE_CLICKABLE
+					State = BUTTONSTATE_CLICKABLE
 				EndIf
 			
 			Case BUTTONSTATE_CLICKED
 				If isMouseOver() And Not MouseDown(MOUSE_LEFT)
 					HasBeenClicked = True
-					state = BUTTONSTATE_CLICKABLE
+					State = BUTTONSTATE_CLICKABLE
 				ElseIf Not isMouseOver() And Not MouseDown(MOUSE_LEFT)
-					state = BUTTONSTATE_CLICKABLE
+					State = BUTTONSTATE_CLICKABLE
 				EndIf
 		End Select
 	End Method
 	
 	Method Draw()
-		Select state
+		Select Self.state
 			Case BUTTONSTATE_CLICKABLE
 				SetColor(0, 200, 0)
 			
@@ -54,16 +56,16 @@ Type Button Extends Sprite
 				
 			Case BUTTONSTATE_UNCLICKABLE
 				SetColor(50, 150, 50)
-				
+			
 		End Select
 		
 		drawRectWithRect(Self.rect)
 	End Method
 End Type
 
-Function newButton:Button(x:Int, y:Int, w:Int, h:Int)
+Function newButton:Button(x:Int, y:Int, w:Int, h:Int, ID:Int)
 	Local newButton:Button = New Button
-	newButton.initSprite(x, y, w, h)
+	newButton.initButton(x, y, w, h, ID)
 	Return newButton
 End Function
 

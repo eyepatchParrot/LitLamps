@@ -5,36 +5,28 @@ Type Sprite
 		Self.rect = newRect(x, y, w, h)
 	End Method
 	
-	Method Tick()
+	Method GetX:Int()
+		Return rect.x
 	End Method
 	
-	Method Draw()
-		SetColor(255, 255, 255)
-		drawRectWithRect(rect)
+	Method GetY:Int()
+		Return rect.y
+	End Method
+	
+	Method GetW:Int()
+		Return rect.w
+	End Method
+	
+	Method GetH:Int()
+		Return rect.h
+	End Method
+	
+	Method Tick()
 	End Method
 End Type
 
-Function newSprite:Sprite(x:Int, y:Int, w:Int, h:Int)
+Function NewSprite:Sprite(x:Int, y:Int, w:Int, h:Int)
 	Local s:Sprite = New Sprite
 	s.initSprite(x, y, w, h)
 	Return s
-End Function
-
-Function tickSprites(sprites:TList)
-	For Local s:Sprite = EachIn sprites
-		s.Tick()
-	Next
-End Function
-
-Function drawSprites(sprites:TList)
-	For Local s:Sprite = EachIn sprites
-		s.Draw()
-	Next
-End Function
-
-Function getFirstSpriteWithCond:Sprite(sprites:TList, cond:Int(s:Sprite))
-	For Local s:Sprite = EachIn sprites
-		If cond(s) Return s
-	Next
-	Return Null
 End Function
