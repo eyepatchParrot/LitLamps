@@ -20,6 +20,7 @@ Type View
 	
 		Cls
 		drawEnemies()
+		'drawTiles()
 		drawBackground()
 		drawMenu()
 		drawTool()
@@ -50,7 +51,7 @@ Type View
 			DrawRect e.GetX(), e.GetY(), e.GetW(), e.GetH()
 		Next
 	End Method
-	
+
 	Method drawBackground()
 		Local sz_bg:Int = 20
 		SetColor 255, 255, 255
@@ -88,8 +89,8 @@ Type View
 			DebugLog "Mouse must be over valid tile for getSelectedTile() to make sense."
 			DebugStop
 		EndIf
-		Local tileX:Int = MouseX() / TILE_SIZE
-		Local tileY:Int = (MouseY() - HUD_HEIGHT) / TILE_SIZE
+		Local tileX:Int = MouseX() / Self.getTileWidth()
+		Local tileY:Int = (MouseY() - HUD_HEIGHT) / Self.getTileHeight()
 		Return Self.TheController.GetTileAt(tileX, tileY)
 	End Method
 		
@@ -98,9 +99,19 @@ Type View
 	End Method
 		
 	Method drawRectAt(t:Tile)
-		Local drawX:Int = t.x * 20
-		Local drawY:Int = t.y * 20 + HUD_HEIGHT
-		DrawRect drawX, drawY, 20, 20
+		Local tileW:Int = Self.getTileWidth()
+		Local tileH:Int = Self.getTileHeight()
+		Local drawX:Int = t.x * tileW
+		Local drawY:Int = t.y * tileH + HUD_HEIGHT
+		DrawRect drawX, drawY, tileW, tileH
+	End Method
+	
+	Method getTileWidth:Int()
+		Return ARENA_WIDTH / NUM_TILES_X
+	End Method
+	
+	Method getTileHeight:Int()
+		Return ARENA_HEIGHT / NUM_TILES_Y
 	End Method
 	
 	Method canUseSelectedToolAt:Int(selectedTile:Tile)
