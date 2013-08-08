@@ -13,15 +13,18 @@ Type View
 	Field TheController:Controller
 	Field buttons:TList
 	Field selectedTool:Int
+	Field mouseWasDown:Int
 		
 	Method Draw()
 		tickButtons()
 		checkForClickedButtons()
+		checkForToolUse()
 	
 		Cls
 		drawEnemies()
-		'drawTiles()
+		drawTiles()
 		drawBackground()
+		drawHud()
 		drawMenu()
 		drawTool()
 		Flip
@@ -45,10 +48,41 @@ Type View
 		Next
 	End Method
 	
+	Method checkForToolUse()
+		If Not MouseDown(MOUSE_LEFT) And Self.mouseWasDown And isMouseOverTile()
+			Self.mouseWasDown = False
+			Self.useTool()
+		Else If MouseDown(MOUSE_LEFT)
+			Self.mouseWasDown = True
+		EndIf
+	End Method
+	
+	Method useTool()
+		Local t:Tile = Self.getSelectedTile()
+		Select selectedTool
+			Case TOOL_TOWER
+				Self.TheController.BuyTowerAt(t)
+		End Select
+	End Method
+					
+	
 	Method drawEnemies()
 		SetColor 255, 0, 0
 		For Local e:Sprite = EachIn Self.TheController.GetEnemies()
 			DrawRect e.GetX(), e.GetY(), e.GetW(), e.GetH()
+		Next
+	End Method
+	
+	Method drawTiles()
+		For Local i:Int = 0 Until NUM_TILES_X
+			For Local j:Int = 0 Until NUM_TILES_Y
+				Local t:Tile = Self.TheController.GetTileAt(i, j)
+				Select t.contains
+					Case CONTAINS_TOWER
+						SetColor 0, 0, 200
+						Self.drawRectAt(t)
+				End Select
+			Next
 		Next
 	End Method
 
@@ -57,6 +91,12 @@ Type View
 		SetColor 255, 255, 255
 		DrawRect(0, HUD_HEIGHT, SCREEN_WIDTH, sz_bg)
 		DrawRect(0, HUD_HEIGHT + ARENA_HEIGHT - sz_bg, SCREEN_WIDTH, sz_bg)
+	End Method
+	
+	Method drawHud()
+		SetColor 255, 255, 255
+		Local moneyText:String = "Money : " + String(Self.TheController.GetMoney())
+		DrawText moneyText, 10, 0
 	End Method
 	
 	Method drawMenu()

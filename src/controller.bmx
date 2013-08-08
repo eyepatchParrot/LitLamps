@@ -8,7 +8,11 @@ Type Controller
 		End If
 		
 		Self.tickEnemies()
+	'	Self.tickTowers()
+	'	Self.tickBullets()
 		Self.checkForSuccessfulEnemies()
+		
+		Self.TheModel.Money :+ 1
 	End Method
 	
 	Method GetEnemies:TList()
@@ -23,7 +27,31 @@ Type Controller
 		
 		Return TheModel.Tiles[x, y]
 	End Method
-
+	
+	Method BuyTowerAt(t:Tile)
+		If t.contains = CONTAINS_NOTHING And Self.TheModel.Money > COST_TOWER
+			t.contains = CONTAINS_TOWER
+			Self.TheModel.Money :- COST_TOWER
+		EndIf
+	End Method
+	
+	Method GetMoney:Int()
+		Return Self.TheModel.Money
+	End Method
+	
+	Method GetTilesWithTowers:TList()
+		Local r:TList = CreateList()
+		For Local i:Int = 0 Until NUM_TILES_X
+			For Local j:Int = 0 Until NUM_TILES_Y
+				Local t:Tile = Self.GetTileAt(i, j)
+				If t.contains = CONTAINS_TOWER
+					r.AddLast(t)
+				EndIf
+			Next
+		Next
+		Return r
+	End Method
+				
 	Method numEnemies:Int()
 		Return Self.TheModel.Enemies.Count()
 	End Method
@@ -37,6 +65,10 @@ Type Controller
 			e.Tick()
 		Next
 	End Method
+	
+	'Method tickTowers()
+	'	For Local t:Tile = EachIn Self.GetTilesWithTowers()
+			
 	
 	Method getFirstSuccessFulEnemy:Enemy()
 		For Local e:Enemy = EachIn Self.GetEnemies()
